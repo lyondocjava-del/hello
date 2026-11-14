@@ -21,23 +21,23 @@ jobs:
             -P "$CERT_P12_PASSWORD" -T /usr/bin/codesign
           security set-key-partition-list -S apple-tool:,apple:,codesign: \
             -s -k "" build.keychain
-          mkdir -p "$HOME/Library/MobileDevice/Provisioning Profiles"
-          cp /tmp/profile.mobileprovision "$HOME/Library/MobileDevice/Provisioning Profiles/"
 
-      - name: Build + sign
+      - name: Build (unsigned)
         run: |
           xcodebuild -project Hello.xcodeproj -scheme Hello \
             -sdk iphoneos -configuration Debug \
-            DEVELOPMENT_TEAM=F5CF2SAH5B \
-            CODE_SIGN_STYLE=Manual \
-            CODE_SIGN_IDENTITY="Apple Development" \
-            PROVISIONING_PROFILE=cb2b1000-39dd-4f20-bcae-e9d9458cdd30 \
+            CODE_SIGNING_ALLOWED=NO \
             -derivedDataPath build/dd build
 
-      - name: Package IPA
+      - name: Sign + package IPA
         run: |
+          APP=build/dd/Build/Products/Debug-iphoneos/Hello.app
+          cp /tmp/profile.mobileprovision "$APP/embedded.mobileprovision"
+          codesign --force --sign "Apple Development" \
+            --entitlements entitlements.plist --timestamp=none "$APP"
+          codesign -v "$APP"
           mkdir -p ipa/Payload
-          cp -R build/dd/Build/Products/Debug-iphoneos/Hello.app ipa/Payload/
+          cp -R "$APP" ipa/Payload/
           cd ipa && zip -qr ../Hello.ipa Payload
 
       - uses: actions/upload-artifact@v4
