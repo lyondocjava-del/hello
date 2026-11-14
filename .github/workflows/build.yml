@@ -1,0 +1,15 @@
+name: build
+on: [push]
+jobs:
+  build:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v4
+      - run: |
+          xcodebuild -project Hello.xcodeproj -scheme Hello \
+            -sdk iphoneos build CODE_SIGNING_ALLOWED=NO \
+            -derivedDataPath build/dd
+      - uses: actions/upload-artifact@v4
+        with:
+          name: Hello.app
+          path: build/dd/Build/Products/Debug-iphoneos/Hello.app
