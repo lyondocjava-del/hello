@@ -31,7 +31,7 @@ jobs:
             DEVELOPMENT_TEAM=F5CF2SAH5B \
             CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Development" \
-            PROVISIONING_PROFILE_SPECIFIER="iOS Team Provisioning Profile: com.docjava.hello" \
+            PROVISIONING_PROFILE=cb2b1000-39dd-4f20-bcae-e9d9458cdd30 \
             -derivedDataPath build/dd build
 
       - name: Package IPA
