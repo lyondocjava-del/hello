@@ -29,6 +29,7 @@ jobs:
           xcodebuild -project Hello.xcodeproj -scheme Hello \
             -sdk iphoneos -configuration Debug \
             DEVELOPMENT_TEAM=F5CF2SAH5B \
+            CODE_SIGN_STYLE=Manual \
             CODE_SIGN_IDENTITY="Apple Development" \
             PROVISIONING_PROFILE_SPECIFIER="iOS Team Provisioning Profile: com.docjava.hello" \
             -derivedDataPath build/dd build
